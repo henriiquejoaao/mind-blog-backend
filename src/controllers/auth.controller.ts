@@ -77,10 +77,9 @@ async function login(request: Request, response: Response) {
     });
   }
 
-  // valida se a chave secreta usada para assinar o JWT foi definida no .env
-  if (!process.env.JWT_SECRET) {
+  if (!process.env.JWT_SECRET) { // valida se a chave secreta usada para assinar o JWT foi definida no .env
     return response.status(500).json({
-      message: "JWT_SECRET não configurado no servidor."
+      message: "JWT_SECRET não configurado no servidor." // retorna um internal server error, pois a chave secreta não foi configurada
     });
   }
 
