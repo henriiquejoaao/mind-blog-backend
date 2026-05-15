@@ -1,13 +1,32 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
+// Configuração do Prisma Client e tipo de banco utilizado
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js" // gera o Prisma Client para acessar o banco pelo código
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql" // define que o banco utilizado é o MySQL
+  url      = env("DATABASE_URL") // usa a URL de conexão definida no arquivo .env
+}
+
+// Definição dos models
+model User {
+  id        Int      @id @default(autoincrement()) // chave primária com auto incremento
+  name      String // nome do usuário
+  email     String   @unique // não permite dois usuários com o mesmo email
+  password  String // senha criptografada com bcrypt
+  createdAt DateTime @default(now()) // data de criação gerada automaticamente
+
+  posts Post[] // relacionamento: um usuário pode ter vários posts
+}
+
+model Post {
+  id        Int      @id @default(autoincrement()) // chave primária com auto incremento
+  title     String // título do artigo
+  content   String   @db.Text // conteúdo do artigo, usando tipo Text no MySQL
+  banner    String? // caminho da imagem/banner do artigo, opcional
+  createdAt DateTime @default(now()) // data de criação gerada automaticamente
+  updatedAt DateTime @updatedAt // data atualizada automaticamente quando o post é alterado
+
+  authorId Int // chave estrangeira que armazena o id do usuário autor do post
+  author   User @relation(fields: [authorId], references: [id]) // relaciona authorId com o id da tabela User
 }
