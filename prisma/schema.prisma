@@ -1,4 +1,4 @@
-// Configuração do Prisma Client e tipo de banco utilizado
+// configuração do Prisma Client e tipo de banco utilizado
 generator client {
   provider = "prisma-client-js" // gera o Prisma Client para acessar o banco pelo código
 }
@@ -8,7 +8,7 @@ datasource db {
   url      = env("DATABASE_URL") // usa a URL de conexão definida no arquivo .env
 }
 
-// Definição dos models
+// definição dos models
 model User {
   id        Int      @id @default(autoincrement()) // chave primária com auto incremento
   name      String // nome do usuário
