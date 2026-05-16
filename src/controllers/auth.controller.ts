@@ -22,7 +22,7 @@ async function register(request: Request, response: Response) {
 
   if (userAlreadyExists) {
     return response.status(400).json({
-      message: "Este email já está em uso." // retorna um bad request porque o email já está em uso
+      message: "Este email já está em uso." // retorna bad request porque o email já está em uso
     });
   }
 
@@ -43,7 +43,7 @@ async function register(request: Request, response: Response) {
     }
   });
 
-  return response.status(201).json(user); // retorna um created com a criação do usuário
+  return response.status(201).json(user); // retorna created com a criação do usuário
 }
 
 // criação da função de login
@@ -53,7 +53,7 @@ async function login(request: Request, response: Response) {
   // validação dos dados
   if (!email || !password) {
     return response.status(400).json({
-      message: "Email e senha são obrigatórios." // retorna um bad request, pois email ou senha não foram enviados
+      message: "Email e senha são obrigatórios." // retorna bad request, pois email ou senha não foram enviados
     });
   }
 
@@ -65,7 +65,7 @@ async function login(request: Request, response: Response) {
 
   if (!user) { // se não for encontrado usuário
     return response.status(401).json({
-      message: "Email ou senha inválidos." // retorna um unauthorized, pois o usuário não existe no banco
+      message: "Email ou senha inválidos." // retorna unauthorized, pois o usuário não existe no banco
     });
   }
 
@@ -73,13 +73,13 @@ async function login(request: Request, response: Response) {
 
   if (!passwordMatches) { // se a senha não corresponder
     return response.status(401).json({
-      message: "Email ou senha inválidos" // retorna um unauthorized, pois a senha fornecida não é igual a senha criptografada pelo banco
+      message: "Email ou senha inválidos" // retorna unauthorized, pois a senha fornecida não é igual a senha criptografada pelo banco
     });
   }
 
   if (!process.env.JWT_SECRET) { // valida se a chave secreta usada para assinar o JWT foi definida no .env
     return response.status(500).json({
-      message: "JWT_SECRET não configurado no servidor." // retorna um internal server error, pois a chave secreta não foi configurada
+      message: "JWT_SECRET não configurado no servidor." // retorna internal server error, pois a chave secreta não foi configurada
     });
   }
 
