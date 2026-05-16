@@ -51,7 +51,8 @@ async function getPostById(request: Request, response: Response) {
 
 // controller responsável por criar um novo artigo
 async function createPost(request: Request, response: Response) {
-  const { title, content, banner } = request.body; // recebe os dados do artigo pelo body do request
+  const { title, content } = request.body ?? {}; // recebe os dados textuais do artigo
+  const banner = request.file ? `/uploads/${request.file.filename}` : undefined; // salva o caminho da imagem enviada
 
   if (!title || !content) {
     return response.status(400).json({
@@ -89,7 +90,8 @@ async function createPost(request: Request, response: Response) {
 // controller responsável por atualizar um artigo existente
 async function updatePost(request: Request, response: Response) {
   const { id } = request.params; // pega o id da URL
-  const { title, content, banner } = request.body; // recebe os dados atualizados
+  const { title, content } = request.body ?? {}; // recebe os dados textuais atualizados do artigo
+  const banner = request.file ? `/uploads/${request.file.filename}` : undefined; // atualiza o caminho da imagem somente se uma nova imagem for enviada
 
   if (!request.userId) {
     return response.status(401).json({
@@ -122,7 +124,7 @@ async function updatePost(request: Request, response: Response) {
     data: {
       title,
       content,
-      banner
+      ...(banner && { banner }) // se uma nova imagem foi enviada, atualiza o banner; caso contrário, mantém o banner antigo
     },
     include: {
       author: {
@@ -138,7 +140,7 @@ async function updatePost(request: Request, response: Response) {
   return response.json(updatedPost); // retorna o JSON do artigo atualizado
 }
 
-// criação da função que remove um artigo existente
+// controller responsável por remover um artigo existente
 async function deletePost(request: Request, response: Response) {
   const { id } = request.params; // pega o id da URL
 

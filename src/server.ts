@@ -3,12 +3,14 @@ import cors from "cors"; // permite que o frontend acesse a API em outra porta/d
 import dotenv from "dotenv"; // dotenv para ler o .env
 import { authRoutes } from "./routes/auth.routes";
 import { postRoutes } from "./routes/post.routes";
+import path from "path";
 
 // configuração inicial da aplicação
 dotenv.config(); // carrega o arquivo .env
 const app = express(); // cria a aplicação Express (objeto principal do servidor)
 app.use(cors()); // ativa o CORS 
 app.use(express.json()); // permite a API entender o body dos requests (JSON)
+app.use("/uploads", express.static(path.resolve(process.cwd(), "uploads"))); // permite acessar publicamente as imagens salvas na pasta uploads
 app.use("/auth", authRoutes); // registra as rotas de autenticação
 app.use("/posts", postRoutes); // registra as rotas de artigos
 
