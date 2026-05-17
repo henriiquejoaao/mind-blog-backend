@@ -24,8 +24,11 @@ model User {
 model Post {
   id        Int      @id @default(autoincrement()) // chave primária com auto incremento
   title     String // título do artigo
+  summary   String?  @db.Text // resumo curto do artigo, opcional
   content   String   @db.Text // conteúdo do artigo, usando tipo Text no MySQL
   banner    String? // caminho da imagem/banner do artigo, opcional
+  category  String   @default("Desenvolvimento web") // categoria do artigo
+  tags      String? // tags do artigo salvas separadas por vírgula
   views     Int      @default(0) // quantidade de visualizações do artigo
   createdAt DateTime @default(now()) // data de criação gerada automaticamente
   updatedAt DateTime @updatedAt // data atualizada automaticamente quando o post é alterado

@@ -81,12 +81,12 @@ async function getPostById(request: Request, response: Response) {
 
 // controller responsável por criar um novo artigo
 async function createPost(request: Request, response: Response) {
-  const { title, content } = request.body ?? {};
+  const { title, summary, content, category, tags } = request.body ?? {};
   const banner = request.file ? `/uploads/${request.file.filename}` : undefined;
 
-  if (!title || !content) {
+  if (!title || !summary || !content || !category) {
     return response.status(400).json({
-      message: "Título e conteúdo são obrigatórios."
+      message: "Título, resumo, categoria e conteúdo são obrigatórios."
     });
   }
 
@@ -99,7 +99,10 @@ async function createPost(request: Request, response: Response) {
   const post = await prisma.post.create({
     data: {
       title,
+      summary,
       content,
+      category,
+      tags,
       banner,
       authorId: request.userId
     },
@@ -126,7 +129,8 @@ async function createPost(request: Request, response: Response) {
 // controller responsável por atualizar um artigo existente
 async function updatePost(request: Request, response: Response) {
   const { id } = request.params;
-  const { title, content, removeBanner } = request.body ?? {};
+  const { title, summary, content, category, tags, removeBanner } =
+    request.body ?? {};
   const banner = request.file ? `/uploads/${request.file.filename}` : undefined;
 
   const postId = parseId(id);
@@ -140,6 +144,12 @@ async function updatePost(request: Request, response: Response) {
   if (!request.userId) {
     return response.status(401).json({
       message: "Usuário não autenticado."
+    });
+  }
+
+  if (!title || !summary || !content || !category) {
+    return response.status(400).json({
+      message: "Título, resumo, categoria e conteúdo são obrigatórios."
     });
   }
 
@@ -169,7 +179,10 @@ async function updatePost(request: Request, response: Response) {
     },
     data: {
       title,
+      summary,
       content,
+      category,
+      tags,
       ...(banner && { banner }),
       ...(shouldRemoveBanner && { banner: null })
     },
