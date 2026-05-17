@@ -1,9 +1,9 @@
 import { Request, Response } from "express"; // tipos do Express para requisição e resposta
 import bcrypt from "bcrypt"; // bcrypt para criptografar senhas
 import { prisma } from "../lib/prisma"; // prisma para acessar o banco
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken"; // biblioteca para gerar e validar tokens JWT
 
-// criação da função de registro
+// controller responsável pelo cadastro de usuários
 async function register(request: Request, response: Response) {
   const { name, email, password } = request.body; // recebe a requisição de cadastro
 
@@ -46,7 +46,7 @@ async function register(request: Request, response: Response) {
   return response.status(201).json(user); // retorna created com a criação do usuário
 }
 
-// criação da função de login
+// controller responsável pelo login de usuários
 async function login(request: Request, response: Response) {
   const { email, password } = request.body; // recebe email e senha do body do request
 

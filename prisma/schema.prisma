@@ -16,7 +16,9 @@ model User {
   password  String // senha criptografada com bcrypt
   createdAt DateTime @default(now()) // data de criação gerada automaticamente
 
-  posts Post[] // relacionamento: um usuário pode ter vários posts
+  posts    Post[] // relacionamento: um usuário pode ter vários posts
+  likes    Like[] // relacionamento: um usuário pode curtir vários posts
+  comments Comment[] // relacionamento: um usuário pode fazer vários comentários
 }
 
 model Post {
@@ -24,9 +26,38 @@ model Post {
   title     String // título do artigo
   content   String   @db.Text // conteúdo do artigo, usando tipo Text no MySQL
   banner    String? // caminho da imagem/banner do artigo, opcional
+  views     Int      @default(0) // quantidade de visualizações do artigo
   createdAt DateTime @default(now()) // data de criação gerada automaticamente
   updatedAt DateTime @updatedAt // data atualizada automaticamente quando o post é alterado
 
   authorId Int // chave estrangeira que armazena o id do usuário autor do post
   author   User @relation(fields: [authorId], references: [id]) // relaciona authorId com o id da tabela User
+
+  likes    Like[] // relacionamento: um post pode ter várias curtidas
+  comments Comment[] // relacionamento: um post pode ter vários comentários
+}
+
+model Like {
+  id        Int      @id @default(autoincrement()) // chave primária com auto incremento
+  createdAt DateTime @default(now()) // data em que a curtida foi criada
+
+  userId Int // id do usuário que curtiu
+  user   User @relation(fields: [userId], references: [id]) // relacionamento com usuário
+
+  postId Int // id do post curtido
+  post   Post @relation(fields: [postId], references: [id]) // relacionamento com post
+
+  @@unique([userId, postId]) // impede o mesmo usuário de curtir o mesmo post mais de uma vez
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement()) // chave primária com auto incremento
+  content   String   @db.Text // conteúdo do comentário
+  createdAt DateTime @default(now()) // data em que o comentário foi criado
+
+  userId Int // id do usuário que comentou
+  user   User @relation(fields: [userId], references: [id]) // relacionamento com usuário
+
+  postId Int // id do post comentado
+  post   Post @relation(fields: [postId], references: [id]) // relacionamento com post
 }

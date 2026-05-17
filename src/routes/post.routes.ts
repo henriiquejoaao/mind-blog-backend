@@ -6,18 +6,32 @@ import {
   getPostById,
   createPost,
   updatePost,
-  deletePost
+  deletePost,
+  viewPost,
+  likePost,
+  unlikePost,
+  listComments,
+  createComment,
+  deleteComment
 } from "../controllers/post.controller";
 
-const postRoutes = Router(); // cria o roteador de posts
+const postRoutes = Router();
 
-postRoutes.get("/", listPosts); // lista todos os artigos
-postRoutes.get("/:id", getPostById); // busca um artigo pelo id
+postRoutes.get("/", listPosts);
+postRoutes.post("/", authMiddleware, upload.single("banner"), createPost);
 
-postRoutes.post("/", authMiddleware, upload.single("banner"), createPost); // cria um artigo com banner, exigindo autenticação
+postRoutes.delete("/comments/:commentId", authMiddleware, deleteComment);
 
-postRoutes.put("/:id", authMiddleware, upload.single("banner"), updatePost); // atualiza um artigo, exigindo autenticação
+postRoutes.post("/:id/view", viewPost);
 
-postRoutes.delete("/:id", authMiddleware, deletePost); // remove um artigo, exigindo autenticação
+postRoutes.post("/:id/like", authMiddleware, likePost);
+postRoutes.delete("/:id/like", authMiddleware, unlikePost);
 
-export { postRoutes }; // exporta as rotas para serem usadas no server.ts
+postRoutes.get("/:id/comments", listComments);
+postRoutes.post("/:id/comments", authMiddleware, createComment);
+
+postRoutes.get("/:id", getPostById);
+postRoutes.put("/:id", authMiddleware, upload.single("banner"), updatePost);
+postRoutes.delete("/:id", authMiddleware, deletePost);
+
+export { postRoutes };
