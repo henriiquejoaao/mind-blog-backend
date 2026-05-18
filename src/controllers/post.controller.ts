@@ -241,11 +241,25 @@ async function deletePost(request: Request, response: Response) {
     });
   }
 
-  await prisma.post.delete({
-    where: {
-      id: postId
-    }
-  });
+  await prisma.$transaction([
+    prisma.comment.deleteMany({
+      where: {
+        postId
+      }
+    }),
+
+    prisma.like.deleteMany({
+      where: {
+        postId
+      }
+    }),
+
+    prisma.post.delete({
+      where: {
+        id: postId
+      }
+    })
+  ]);
 
   return response.status(204).send();
 }
