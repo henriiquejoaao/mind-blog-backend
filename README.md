@@ -71,6 +71,7 @@ Além do escopo principal, foram adicionadas funcionalidades extras consideradas
 - Remoção de banner
 - Validações de permissão para editar/excluir artigos
 - Validação para impedir curtidas duplicadas
+- Exclusão de artigos com remoção automática de curtidas e comentários relacionados
 - Dump do banco incluído no repositório
 
 ## 📁 Estrutura principal
@@ -95,6 +96,9 @@ prisma
 
 database
 └── dump.sql
+
+uploads
+└── imagens utilizadas nos artigos
 ```
 
 ## 🗄️ Banco de dados
@@ -114,7 +118,7 @@ Esse arquivo pode ser usado para importar a estrutura e os dados iniciais do ban
 ### 1. Clone o repositório
 
 ```bash
-git clone COLOQUE_AQUI_O_LINK_DO_REPOSITORIO_BACKEND
+git clone https://github.com/henriiquejoaao/mind-blog-backend
 ```
 
 ### 2. Acesse a pasta do projeto
@@ -405,3 +409,5 @@ Rota protegida.
 Este repositório contém apenas o backend.
 
 Para testar a aplicação completa, rode também o frontend.
+
+Certifique-se de que este repositório esteja público durante o processo seletivo e que o arquivo `database/dump.sql` esteja presente no repositório.
